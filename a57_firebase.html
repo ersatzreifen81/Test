@@ -10,8 +10,7 @@
         body { background: #f9f9f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; padding: 20px; min-height: 100vh; }
         .container { max-width: 600px; margin: 0 auto; }
         .logo-section { text-align: center; margin-bottom: 20px; }
-        .logo { height: 80px; width: auto; opacity: 1; transition: opacity 0.2s; }
-        .logo:hover { opacity: 0.8; }
+        .logo { height: 80px; width: auto; }
         .header { text-align: center; margin-bottom: 30px; }
         .header h1 { color: #e30613; font-size: 28px; margin-bottom: 10px; }
         .header p { color: #333; font-size: 14px; line-height: 1.5; }
@@ -19,27 +18,26 @@
         .button-question { font-size: 18px; font-weight: 600; color: #333; }
         .main-button { width: auto; min-width: 280px; padding: 25px 40px; font-size: 22px; font-weight: bold; background: linear-gradient(180deg, #f31423 0%, #e30613 50%, #c00511 100%); color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 8px 16px rgba(0,0,0,0.35), 0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -2px 4px rgba(0,0,0,0.15); transition: all 0.1s; display: flex; align-items: center; justify-content: center; text-align: center; white-space: nowrap; }
         .main-button:hover { background: linear-gradient(180deg, #f82a35 0%, #f31423 50%, #d00512 100%); box-shadow: 0 10px 20px rgba(0,0,0,0.4), 0 5px 10px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -2px 4px rgba(0,0,0,0.15); }
-        .main-button:active { transform: translateY(3px); box-shadow: 0 3px 6px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -2px 4px rgba(0,0,0,0.15); }
+        .main-button:active { transform: translateY(3px); }
         .reason-select { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: none; }
         .reason-select.show { display: block; }
         .reason-select p { margin-bottom: 15px; font-weight: bold; color: #333; }
         .reason-buttons { display: flex; flex-direction: column; gap: 10px; }
-        .reason-btn { padding: 15px; font-size: 16px; background-color: #f0f0f0; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        .reason-btn { padding: 15px; font-size: 16px; background-color: #f0f0f0; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; }
         .reason-btn:hover { background-color: #e8e8e8; }
         .confirmation { background-color: #d4edda; padding: 20px; border-radius: 10px; color: #155724; font-weight: bold; font-size: 18px; text-align: center; display: none; }
         .confirmation.show { display: block; }
         .stats-section { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .stats-section h3 { color: #333; margin-top: 0; margin-bottom: 15px; font-size: 16px; }
-        .total-count { text-align: center; }
+        .stats-section h3 { color: #333; margin-bottom: 15px; }
         .total-count p { font-size: 48px; font-weight: bold; color: #e30613; margin: 0; }
-        .reason-stats { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px; }
-        .reason-stat { text-align: center; flex: 1; min-width: 100px; }
+        .reason-stats { display: flex; justify-content: space-around; gap: 15px; }
+        .reason-stat { text-align: center; flex: 1; }
         .reason-stat p:first-child { font-size: 28px; font-weight: bold; margin: 0; }
         .reason-stat p:last-child { font-size: 12px; color: #666; margin: 5px 0 0 0; }
         .stat-general { color: #e30613; }
         .stat-cars { color: #ffa500; }
         .stat-motorcycles { color: #ffcc00; }
-        .chart-container { position: relative; height: 180px; margin-bottom: 20px; }
+        .chart-container { position: relative; height: 180px; }
         .empty-state { text-align: center; color: #999; padding: 20px; }
         .loading { text-align: center; padding: 20px; color: #999; }
         .footer { background: #f0f0f0; padding: 20px; border-radius: 10px; font-size: 12px; color: #666; text-align: center; margin-top: 40px; }
@@ -49,7 +47,7 @@
 <body>
     <div class="container">
         <div class="logo-section">
-            <a href="https://www.spd-ehrenfeld.de" target="_blank" rel="noopener">
+            <a href="https://www.spd-ehrenfeld.de" target="_blank">
                 <img src="https://www.spd-ehrenfeld.de/wp-content/uploads/sites/1891/2026/02/cropped-spd-ehrenfeld-v003-rot-150x150.png" alt="SPD Köln Ehrenfeld" class="logo">
             </a>
         </div>
@@ -85,57 +83,39 @@
         </div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-compat/app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-compat/database.js"></script>
     <script>
-        // Warte bis Firebase geladen ist
-        function initApp() {
-            if (typeof firebase === 'undefined') {
-                setTimeout(initApp, 100);
-                return;
-            }
-
-            const firebaseConfig = {
-                apiKey: "AIzaSyASjDbNVi97uCn7hh-UOYIrhwLLzF_Q4n0",
-                authDomain: "a57-a2318.firebaseapp.com",
-                databaseURL: "https://a57-a2318-default-rtdb.europe-west1.firebasedatabase.app",
-                projectId: "a57-a2318",
-                storageBucket: "a57-a2318.firebasestorage.app",
-                messagingSenderId: "1033473486458",
-                appId: "1:1033473486458:web:cceef8dc7519fe6fb115c3"
-            };
-
-            firebase.initializeApp(firebaseConfig);
-            const db = firebase.database();
-            const reportsRef = db.ref('reports');
-
-            const mainBtn = document.getElementById('mainBtn');
-            const reasonSelect = document.getElementById('reasonSelect');
-            const confirmation = document.getElementById('confirmation');
-            const statsContainer = document.getElementById('statsContainer');
-            
-            mainBtn.addEventListener('click', () => {
-                reasonSelect.classList.add('show');
-                mainBtn.style.display = 'none';
-            });
-            
-            document.querySelectorAll('.reason-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const reason = e.currentTarget.dataset.reason;
-                    const now = new Date();
-                    
-                    const reasonLabel = {
-                        'general': 'Lärmbelästigung allgemein',
-                        'cars': 'Laute Autos',
-                        'motorcycles': 'Motorräder'
-                    };
-                    
-                    reportsRef.push({
-                        reason: reason,
-                        timestamp: now.toISOString(),
-                        hour: now.getHours()
-                    });
-                    
+        const DB_URL = 'https://a57-a2318-default-rtdb.europe-west1.firebasedatabase.app/reports';
+        const mainBtn = document.getElementById('mainBtn');
+        const reasonSelect = document.getElementById('reasonSelect');
+        const confirmation = document.getElementById('confirmation');
+        const statsContainer = document.getElementById('statsContainer');
+        
+        mainBtn.addEventListener('click', () => {
+            reasonSelect.classList.add('show');
+            mainBtn.style.display = 'none';
+        });
+        
+        document.querySelectorAll('.reason-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const reason = e.currentTarget.dataset.reason;
+                const now = new Date();
+                
+                const reasonLabel = {
+                    'general': 'Lärmbelästigung allgemein',
+                    'cars': 'Laute Autos',
+                    'motorcycles': 'Motorräder'
+                };
+                
+                const data = {
+                    reason: reason,
+                    timestamp: now.toISOString(),
+                    hour: now.getHours()
+                };
+                
+                fetch(DB_URL + '.json', {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                }).then(() => {
                     reasonSelect.classList.remove('show');
                     confirmation.classList.add('show');
                     confirmation.textContent = `✓ Danke! Grund: ${reasonLabel[reason]}`;
@@ -145,18 +125,20 @@
                         mainBtn.style.display = 'flex';
                         updateStats();
                     }, 2000);
-                });
+                }).catch(err => console.error(err));
             });
-            
-            function updateStats() {
-                reportsRef.once('value', (snapshot) => {
-                    const reportData = snapshot.val() || {};
-                    const reports = Object.values(reportData);
-                    
-                    if (reports.length === 0) {
+        });
+        
+        function updateStats() {
+            fetch(DB_URL + '.json')
+                .then(res => res.json())
+                .then(data => {
+                    if (!data) {
                         statsContainer.innerHTML = '<div class="stats-section"><div class="empty-state">Noch keine Meldungen. Drücke den Button oben!</div></div>';
                         return;
                     }
+                    
+                    const reports = Object.values(data);
                     
                     const reasonStats = {
                         'general': reports.filter(r => r.reason === 'general').length,
@@ -192,9 +174,9 @@
                     }
                     
                     const labels = Array.from({length: 24}, (_, i) => `${i}:00`);
-                    const data = Array.from({length: 24}, (_, i) => hourlyStats[i]);
-                    const maxValue = Math.max(...data, 1);
-                    const colors = data.map(value => {
+                    const dataPoints = Array.from({length: 24}, (_, i) => hourlyStats[i]);
+                    const maxValue = Math.max(...dataPoints, 1);
+                    const colors = dataPoints.map(value => {
                         if (value === 0) return 'rgba(200, 200, 200, 0.3)';
                         const opacity = value / maxValue;
                         return `rgba(227, 6, 19, ${0.3 + (opacity * 0.7)})`;
@@ -203,17 +185,15 @@
                     const ctx = document.getElementById('hourlyChart').getContext('2d');
                     new Chart(ctx, {
                         type: 'bar',
-                        data: { labels: labels, datasets: [{ label: 'Meldungen', data: data, backgroundColor: colors, borderRadius: 4, borderWidth: 0 }] },
+                        data: { labels: labels, datasets: [{ label: 'Meldungen', data: dataPoints, backgroundColor: colors, borderRadius: 4, borderWidth: 0 }] },
                         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } }, x: { ticks: { maxRotation: 45, minRotation: 0 } } } }
                     });
-                });
-            }
-            
-            setInterval(updateStats, 5000);
-            updateStats();
+                })
+                .catch(err => console.error(err));
         }
         
-        initApp();
+        setInterval(updateStats, 5000);
+        updateStats();
     </script>
 </body>
 </html>
