@@ -82,7 +82,7 @@
             </p>
         </div>
     </div>
-
+ 
     <script>
         const DB_URL = 'https://a57-a2318-default-rtdb.europe-west1.firebasedatabase.app/reports';
         const mainBtn = document.getElementById('mainBtn');
@@ -192,8 +192,13 @@
                 .catch(err => console.error(err));
         }
         
-        setInterval(updateStats, 5000);
+        // Initial load
         updateStats();
+        
+        // Listen for changes - update when data actually changes
+        const eventSource = new EventSource(DB_URL + '.json?auth=none');
+        eventSource.addEventListener('put', () => updateStats());
+        eventSource.addEventListener('patch', () => updateStats());
     </script>
 </body>
 </html>
