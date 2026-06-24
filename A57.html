@@ -94,8 +94,56 @@
             reasonSelect.classList.add('show');
             mainBtn.style.display = 'none';
         });
+        function checkRateLimit() {
+    const lastVote = localStorage.getItem('lastVoteTime');
+    const now = Date.now();
+    if (lastVote && now - lastVote < 60000) {
+        const remaining = Math.ceil((60000 - (now - lastVote)) / 1000);
+        alert(`Bitte warten Sie noch ${remaining} Sekunden vor der nächsten Abstimmung.`);
+        return false;
+    }
+    localStorage.setItem('lastVoteTime', now);
+    return true;
+}
+
+document.querySelectorAll('.reason-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        if (!checkRateLimit()) {
+            e.preventDefault();
+            return;
+        }
+        const reason = e.currentTarget.dataset.reason;
+        const now = new Date();
         
-        document.querySelectorAll('.reason-btn').forEach(btn => {
+        const reasonLabel = {
+            'general': 'Lärmbelästigung allgemein',
+            'cars': 'Laute Autos',
+            'motorcycles': 'Motorräder'
+        };
+        
+        const data = {
+            reason: reason,
+            timestamp: now.toISOString(),
+            hour: now.getHours()
+        };
+        
+        fetch(DB_URL + '.json', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        }).then(() => {
+            reasonSelect.classList.remove('show');
+            confirmation.classList.add('show');
+            confirmation.textContent = `✓ Danke! Grund: ${reasonLabel[reason]}`;
+            
+            setTimeout(() => {
+                confirmation.classList.remove('show');
+                mainBtn.style.display = 'flex';
+                updateStats();
+            }, 2000);
+        }).catch(err => console.error(err));
+    });
+});
+        dcument.querySelectorAll('.reason-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const reason = e.currentTarget.dataset.reason;
                 const now = new Date();
@@ -109,25 +157,7 @@
                 const data = {
                     reason: reason,
                     timestamp: now.toISOString(),
-                    hour: now.getHours()
-                };
-                
-                fetch(DB_URL + '.json', {
-                    method: 'POST',
-                    body: JSON.stringify(data)
-                }).then(() => {
-                    reasonSelect.classList.remove('show');
-                    confirmation.classList.add('show');
-                    confirmation.textContent = `✓ Danke! Grund: ${reasonLabel[reason]}`;
-                    
-                    setTimeout(() => {
-                        confirmation.classList.remove('show');
-                        mainBtn.style.display = 'flex';
-                        updateStats();
-                    }, 2000);
-                }).catch(err => console.error(err));
-            });
-        });
+                    hour: now.getHo
         
         function updateStats() {
             fetch(DB_URL + '.json')
