@@ -100,7 +100,24 @@
             const now = Date.now();
             if (lastVote && now - lastVote < 60000) {
                 const remaining = Math.ceil((60000 - (now - lastVote)) / 1000);
-                alert(`Bitte warten Sie noch ${remaining} Sekunden vor der nächsten Abstimmung.`);
+                mainBtn.disabled = true;
+                mainBtn.style.opacity = '0.5';
+                mainBtn.style.cursor = 'not-allowed';
+                mainBtn.textContent = `⏱️ Warten Sie ${remaining}s`;
+                
+                const interval = setInterval(() => {
+                    const newNow = Date.now();
+                    const newRemaining = Math.ceil((60000 - (newNow - lastVote)) / 1000);
+                    if (newRemaining > 0) {
+                        mainBtn.textContent = `⏱️ Warten Sie ${newRemaining}s`;
+                    } else {
+                        mainBtn.disabled = false;
+                        mainBtn.style.opacity = '1';
+                        mainBtn.style.cursor = 'pointer';
+                        mainBtn.textContent = '🔊 JA – JETZT DRÜCKEN';
+                        clearInterval(interval);
+                    }
+                }, 1000);
                 return false;
             }
             localStorage.setItem('lastVoteTime', now);
