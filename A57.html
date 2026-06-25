@@ -96,46 +96,8 @@
             mainBtn.style.display = 'none';
         });
         
-        function checkRateLimit() {
-            const lastVote = localStorage.getItem('lastVoteTime');
-            const now = Date.now();
-            if (lastVote && now - lastVote < 60000) {
-                const remaining = Math.ceil((60000 - (now - lastVote)) / 1000);
-                mainBtn.disabled = true;
-                mainBtn.style.display = 'flex';
-                mainBtn.style.background = 'linear-gradient(180deg, #999 0%, #888 50%, #777 100%)';
-                mainBtn.style.opacity = '0.6';
-                mainBtn.style.cursor = 'not-allowed';
-                mainBtn.style.pointerEvents = 'none';
-                mainBtn.textContent = `⏱️ Warten Sie ${remaining}s`;
-                
-                const interval = setInterval(() => {
-                    const newNow = Date.now();
-                    const newRemaining = Math.ceil((60000 - (newNow - lastVote)) / 1000);
-                    if (newRemaining > 0) {
-                        mainBtn.textContent = `⏱️ Warten Sie ${newRemaining}s`;
-                    } else {
-                        mainBtn.disabled = false;
-                        mainBtn.style.background = 'linear-gradient(180deg, #f31423 0%, #e30613 50%, #c00511 100%)';
-                        mainBtn.style.opacity = '1';
-                        mainBtn.style.cursor = 'pointer';
-                        mainBtn.style.pointerEvents = 'auto';
-                        mainBtn.textContent = '🔊 JA – JETZT DRÜCKEN';
-                        clearInterval(interval);
-                    }
-                }, 1000);
-                return false;
-            }
-            localStorage.setItem('lastVoteTime', now);
-            return true;
-        }
-
         document.querySelectorAll('.reason-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                if (!checkRateLimit()) {
-                    e.preventDefault();
-                    return;
-                }
                 const reason = e.currentTarget.dataset.reason;
                 const now = new Date();
                 
@@ -159,14 +121,46 @@
                     confirmation.classList.add('show');
                     confirmation.textContent = `✓ Danke! Grund: ${reasonLabel[reason]}`;
                     
+                    const lastVote = Date.now();
+                    localStorage.setItem('lastVoteTime', lastVote);
+                    
                     setTimeout(() => {
                         confirmation.classList.remove('show');
                         mainBtn.style.display = 'flex';
+                        startCountdown();
                         updateStats();
                     }, 2000);
                 }).catch(err => console.error(err));
             });
         });
+        
+        function startCountdown() {
+            const lastVote = localStorage.getItem('lastVoteTime');
+            const remaining = Math.ceil((60000 - (Date.now() - lastVote)) / 1000);
+            
+            mainBtn.disabled = true;
+            mainBtn.style.background = 'linear-gradient(180deg, #999 0%, #888 50%, #777 100%)';
+            mainBtn.style.opacity = '0.6';
+            mainBtn.style.cursor = 'not-allowed';
+            mainBtn.style.pointerEvents = 'none';
+            mainBtn.textContent = `⏱️ Warten Sie ${remaining}s`;
+            
+            const interval = setInterval(() => {
+                const newNow = Date.now();
+                const newRemaining = Math.ceil((60000 - (newNow - lastVote)) / 1000);
+                if (newRemaining > 0) {
+                    mainBtn.textContent = `⏱️ Warten Sie ${newRemaining}s`;
+                } else {
+                    mainBtn.disabled = false;
+                    mainBtn.style.background = 'linear-gradient(180deg, #f31423 0%, #e30613 50%, #c00511 100%)';
+                    mainBtn.style.opacity = '1';
+                    mainBtn.style.cursor = 'pointer';
+                    mainBtn.style.pointerEvents = 'auto';
+                    mainBtn.textContent = '🔊 JA – JETZT DRÜCKEN';
+                    clearInterval(interval);
+                }
+            }, 1000);
+        }
         
         function updateStats() {
             fetch(DB_URL + '.json')
@@ -231,10 +225,8 @@
                 .catch(err => console.error(err));
         }
         
-        // Initial load
         updateStats();
         
-        // Listen for changes - update when data actually changes
         const eventSource = new EventSource(DB_URL + '.json?auth=none');
         eventSource.addEventListener('put', () => updateStats());
         eventSource.addEventListener('patch', () => updateStats());
