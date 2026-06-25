@@ -54,7 +54,7 @@
         
         <div class="header">
             <h1>A57 Lärmmelder</h1>
-            <p>Deine Meldung hilft uns, die Lärmprobleme durch die A57 zu dokumentieren und Gegenmaßnahmen einzufordern. Drücke den Button, wenn es gerade laut ist.</p>
+            <p>Deine Meldung hilft uns, die Lärmprobleme durch die A57 zu dokumentieren und bei der Stadt einzufordern. Drücke den Button, wenn es gerade laut ist.</p>
         </div>
         
         <div class="button-section">
@@ -64,7 +64,7 @@
             <div class="reason-select" id="reasonSelect">
                 <p>Was ist der Grund?</p>
                 <div class="reason-buttons">
-                    <button class="reason-btn" data-reason="general">📢 Verkehr insgesamt</button>
+                    <button class="reason-btn" data-reason="general">📢 Lärmbelästigung allgemein</button>
                     <button class="reason-btn" data-reason="cars">🚗 Laute Autos / Auspuff</button>
                     <button class="reason-btn" data-reason="motorcycles">🏍️ Motorräder</button>
                 </div>
@@ -94,62 +94,30 @@
             reasonSelect.classList.add('show');
             mainBtn.style.display = 'none';
         });
+        
         function checkRateLimit() {
-    const lastVote = localStorage.getItem('lastVoteTime');
-    const now = Date.now();
-    if (lastVote && now - lastVote < 60000) {
-        const remaining = Math.ceil((60000 - (now - lastVote)) / 1000);
-        alert(`Bitte warten Sie noch ${remaining} Sekunden vor der nächsten Abstimmung.`);
-        return false;
-    }
-    localStorage.setItem('lastVoteTime', now);
-    return true;
-}
-
-document.querySelectorAll('.reason-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        if (!checkRateLimit()) {
-            e.preventDefault();
-            return;
+            const lastVote = localStorage.getItem('lastVoteTime');
+            const now = Date.now();
+            if (lastVote && now - lastVote < 60000) {
+                const remaining = Math.ceil((60000 - (now - lastVote)) / 1000);
+                alert(`Bitte warten Sie noch ${remaining} Sekunden vor der nächsten Abstimmung.`);
+                return false;
+            }
+            localStorage.setItem('lastVoteTime', now);
+            return true;
         }
-        const reason = e.currentTarget.dataset.reason;
-        const now = new Date();
-        
-        const reasonLabel = {
-            'general': 'Lärmbelästigung allgemein',
-            'cars': 'Laute Autos',
-            'motorcycles': 'Motorräder'
-        };
-        
-        const data = {
-            reason: reason,
-            timestamp: now.toISOString(),
-            hour: now.getHours()
-        };
-        
-        fetch(DB_URL + '.json', {
-            method: 'POST',
-            body: JSON.stringify(data)
-        }).then(() => {
-            reasonSelect.classList.remove('show');
-            confirmation.classList.add('show');
-            confirmation.textContent = `✓ Danke! Grund: ${reasonLabel[reason]}`;
-            
-            setTimeout(() => {
-                confirmation.classList.remove('show');
-                mainBtn.style.display = 'flex';
-                updateStats();
-            }, 2000);
-        }).catch(err => console.error(err));
-    });
-});
-        dcument.querySelectorAll('.reason-btn').forEach(btn => {
+
+        document.querySelectorAll('.reason-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
+                if (!checkRateLimit()) {
+                    e.preventDefault();
+                    return;
+                }
                 const reason = e.currentTarget.dataset.reason;
                 const now = new Date();
                 
                 const reasonLabel = {
-                    'general': 'Verkehr insgesamt',
+                    'general': 'Lärmbelästigung allgemein',
                     'cars': 'Laute Autos',
                     'motorcycles': 'Motorräder'
                 };
@@ -157,7 +125,25 @@ document.querySelectorAll('.reason-btn').forEach(btn => {
                 const data = {
                     reason: reason,
                     timestamp: now.toISOString(),
-                    hour: now.getHo
+                    hour: now.getHours()
+                };
+                
+                fetch(DB_URL + '.json', {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                }).then(() => {
+                    reasonSelect.classList.remove('show');
+                    confirmation.classList.add('show');
+                    confirmation.textContent = `✓ Danke! Grund: ${reasonLabel[reason]}`;
+                    
+                    setTimeout(() => {
+                        confirmation.classList.remove('show');
+                        mainBtn.style.display = 'flex';
+                        updateStats();
+                    }, 2000);
+                }).catch(err => console.error(err));
+            });
+        });
         
         function updateStats() {
             fetch(DB_URL + '.json')
