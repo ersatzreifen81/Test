@@ -7,78 +7,154 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #f9f9f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; padding: 20px; min-height: 100vh; }
-        .container { max-width: 600px; margin: 0 auto; }
-        .logo-section { text-align: center; margin-bottom: 20px; }
-        .logo { height: 80px; width: auto; }
+        body { background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; padding: 20px; min-height: 100vh; }
+        
+        .container { max-width: 1200px; margin: 0 auto; }
+        
         .header { text-align: center; margin-bottom: 30px; }
-        .header h1 { color: #e30613; font-size: 28px; margin-bottom: 10px; }
-        .header p { color: #333; font-size: 14px; line-height: 1.5; }
-        .button-section { margin-bottom: 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 15px; }
-        .button-question { font-size: 18px; font-weight: 600; color: #333; }
-        .main-button { width: auto; min-width: 280px; padding: 25px 40px; font-size: 22px; font-weight: bold; background: linear-gradient(180deg, #f31423 0%, #e30613 50%, #c00511 100%); color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 8px 16px rgba(0,0,0,0.35), 0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -2px 4px rgba(0,0,0,0.15); transition: all 0.1s; display: flex; align-items: center; justify-content: center; text-align: center; white-space: nowrap; }
-        .main-button:hover { background: linear-gradient(180deg, #f82a35 0%, #f31423 50%, #d00512 100%); box-shadow: 0 10px 20px rgba(0,0,0,0.4), 0 5px 10px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -2px 4px rgba(0,0,0,0.15); }
-        .main-button:active { transform: translateY(3px); }
-        .main-button:disabled { background: linear-gradient(180deg, #999 0%, #888 50%, #777 100%); opacity: 0.6 !important; cursor: not-allowed !important; }
-        .reason-select { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: none; }
+        .logo-section { margin-bottom: 20px; }
+        .logo { height: 70px; width: auto; }
+        .header h1 { color: #e30613; font-size: 32px; margin-bottom: 8px; font-weight: bold; }
+        .header p { color: #555; font-size: 15px; line-height: 1.6; max-width: 500px; margin: 0 auto; }
+        
+        .main-content { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
+        
+        /* LEFT COLUMN */
+        .left-column { display: flex; flex-direction: column; gap: 20px; }
+        
+        .button-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .button-question { font-size: 20px; font-weight: 700; color: #333; margin-bottom: 20px; text-align: center; }
+        
+        .main-button { width: 100%; padding: 30px; font-size: 24px; font-weight: 900; background: linear-gradient(180deg, #f31423 0%, #e30613 50%, #c00511 100%); color: white; border: none; border-radius: 60px; cursor: pointer; box-shadow: 0 8px 20px rgba(227, 6, 19, 0.4), inset 0 1px 0 rgba(255,255,255,0.25); transition: all 0.15s; display: flex; align-items: center; justify-content: center; text-align: center; white-space: nowrap; letter-spacing: 0.5px; }
+        .main-button:hover:not(:disabled) { background: linear-gradient(180deg, #f82a35 0%, #f31423 50%, #d00512 100%); box-shadow: 0 12px 25px rgba(227, 6, 19, 0.5), inset 0 1px 0 rgba(255,255,255,0.25); transform: translateY(-2px); }
+        .main-button:active:not(:disabled) { transform: translateY(0); }
+        .main-button:disabled { background: linear-gradient(180deg, #999 0%, #888 50%, #777 100%); cursor: not-allowed; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        
+        .progress-container { display: none; margin-top: 15px; }
+        .progress-container.show { display: block; }
+        .progress-bar { width: 100%; height: 8px; background: #e0e0e0; border-radius: 10px; overflow: hidden; margin-bottom: 8px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #c00511, #e30613); width: 100%; border-radius: 10px; transition: width 0.1s linear; }
+        .progress-text { text-align: center; font-size: 13px; color: #666; font-weight: 600; }
+        
+        .reason-select { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: none; }
         .reason-select.show { display: block; }
-        .reason-select p { margin-bottom: 15px; font-weight: bold; color: #333; }
-        .reason-buttons { display: flex; flex-direction: column; gap: 10px; }
-        .reason-btn { padding: 15px; font-size: 16px; background-color: #f0f0f0; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; }
-        .reason-btn:hover { background-color: #e8e8e8; }
-        .confirmation { background-color: #d4edda; padding: 20px; border-radius: 10px; color: #155724; font-weight: bold; font-size: 18px; text-align: center; display: none; }
+        .reason-select > p { margin-bottom: 18px; font-weight: 700; color: #333; font-size: 16px; }
+        
+        .reason-buttons { display: flex; flex-direction: column; gap: 12px; }
+        
+        .reason-btn { padding: 18px 16px; font-size: 16px; font-weight: 600; border: 2px solid #ddd; border-radius: 12px; cursor: pointer; transition: all 0.2s; background: white; }
+        .reason-btn[data-reason="general"] { background: linear-gradient(135deg, #fff5f5 0%, #ffebeb 100%); border-color: #e30613; color: #c00511; }
+        .reason-btn[data-reason="general"]:hover { background: linear-gradient(135deg, #ffe8e8 0%, #ffd6d6 100%); transform: translateX(4px); box-shadow: 0 4px 10px rgba(227, 6, 19, 0.2); }
+        
+        .reason-btn[data-reason="cars"] { background: linear-gradient(135deg, #fff9f0 0%, #fff0e6 100%); border-color: #ffa500; color: #d97d00; }
+        .reason-btn[data-reason="cars"]:hover { background: linear-gradient(135deg, #ffe8cc 0%, #ffd9b3 100%); transform: translateX(4px); box-shadow: 0 4px 10px rgba(255, 165, 0, 0.2); }
+        
+        .reason-btn[data-reason="motorcycles"] { background: linear-gradient(135deg, #fffcf0 0%, #fff7e6 100%); border-color: #ffcc00; color: #b39800; }
+        .reason-btn[data-reason="motorcycles"]:hover { background: linear-gradient(135deg, #fff3cc 0%, #ffecb3 100%); transform: translateX(4px); box-shadow: 0 4px 10px rgba(255, 204, 0, 0.2); }
+        
+        .confirmation { background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); padding: 20px; border-radius: 12px; color: #155724; font-weight: 700; font-size: 16px; text-align: center; display: none; border-left: 5px solid #28a745; }
         .confirmation.show { display: block; }
-        .stats-section { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .stats-section h3 { color: #333; margin-bottom: 15px; }
-        .total-count p { font-size: 48px; font-weight: bold; color: #e30613; margin: 0; }
-        .reason-stats { display: flex; justify-content: space-around; gap: 15px; }
-        .reason-stat { text-align: center; flex: 1; }
-        .reason-stat p:first-child { font-size: 28px; font-weight: bold; margin: 0; }
-        .reason-stat p:last-child { font-size: 12px; color: #666; margin: 5px 0 0 0; }
-        .stat-general { color: #e30613; }
-        .stat-cars { color: #ffa500; }
-        .stat-motorcycles { color: #ffcc00; }
-        .chart-container { position: relative; height: 180px; }
-        .empty-state { text-align: center; color: #999; padding: 20px; }
-        .loading { text-align: center; padding: 20px; color: #999; }
-        .footer { background: #f0f0f0; padding: 20px; border-radius: 10px; font-size: 12px; color: #666; text-align: center; margin-top: 40px; }
-        .footer a { color: #e30613; text-decoration: none; }
+        
+        /* RIGHT COLUMN */
+        .right-column { display: flex; flex-direction: column; gap: 20px; }
+        
+        .stats-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .stats-card h3 { color: #333; margin-bottom: 18px; font-size: 16px; font-weight: 700; }
+        
+        .total-count { text-align: center; padding: 20px; }
+        .total-count p { font-size: 56px; font-weight: 900; color: #e30613; margin: 0; line-height: 1; }
+        .total-count span { font-size: 14px; color: #999; font-weight: 500; display: block; margin-top: 8px; }
+        
+        .reason-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+        .reason-stat-card { padding: 18px; border-radius: 12px; text-align: center; border: 2px solid transparent; }
+        
+        .reason-stat-card.general { background: linear-gradient(135deg, #fff5f5 0%, #ffebeb 100%); border-color: #e30613; }
+        .reason-stat-card.general .value { color: #c00511; }
+        .reason-stat-card.general .label { color: #999; }
+        
+        .reason-stat-card.cars { background: linear-gradient(135deg, #fff9f0 0%, #fff0e6 100%); border-color: #ffa500; }
+        .reason-stat-card.cars .value { color: #d97d00; }
+        .reason-stat-card.cars .label { color: #999; }
+        
+        .reason-stat-card.motorcycles { background: linear-gradient(135deg, #fffcf0 0%, #fff7e6 100%); border-color: #ffcc00; }
+        .reason-stat-card.motorcycles .value { color: #b39800; }
+        .reason-stat-card.motorcycles .label { color: #999; }
+        
+        .reason-stat-card .value { font-size: 32px; font-weight: 900; margin: 0; line-height: 1; }
+        .reason-stat-card .label { font-size: 12px; font-weight: 600; margin-top: 8px; }
+        
+        .chart-container { position: relative; height: 200px; margin-top: 15px; }
+        
+        .latest-reports ol { margin: 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .latest-reports li { padding: 14px; background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%); border-radius: 10px; border-left: 4px solid #e30613; font-size: 14px; }
+        .latest-reports .timestamp { display: block; font-weight: 700; color: #333; margin-bottom: 4px; }
+        .latest-reports .reason { display: block; color: #666; font-size: 13px; }
+        
+        .empty-state { text-align: center; color: #999; padding: 30px 20px; font-size: 15px; }
+        .loading { text-align: center; padding: 30px 20px; color: #999; }
+        
+        .footer { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; font-size: 13px; color: #666; margin-top: 20px; }
+        .footer a { color: #e30613; text-decoration: none; font-weight: 600; }
+        .footer p { margin: 10px 0; }
+        
+        /* MOBILE */
+        @media (max-width: 900px) {
+            .main-content { grid-template-columns: 1fr; gap: 20px; }
+            .reason-stats { grid-template-columns: 1fr; }
+            .button-section { padding: 25px; }
+            .reason-select { padding: 20px; }
+            .stats-card { padding: 20px; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo-section">
-            <a href="https://www.spd-ehrenfeld.de" target="_blank">
-                <img src="https://www.spd-ehrenfeld.de/wp-content/uploads/sites/1891/2026/02/cropped-spd-ehrenfeld-v003-rot-150x150.png" alt="SPD Köln Ehrenfeld" class="logo">
-            </a>
-        </div>
-        
         <div class="header">
+            <div class="logo-section">
+                <a href="https://www.spd-ehrenfeld.de" target="_blank">
+                    <img src="https://www.spd-ehrenfeld.de/wp-content/uploads/sites/1891/2026/02/cropped-spd-ehrenfeld-v003-rot-150x150.png" alt="SPD Köln Ehrenfeld" class="logo">
+                </a>
+            </div>
             <h1>A57 Lärmmelder</h1>
             <p>Deine Meldung hilft uns, die Lärmprobleme durch die A57 zu dokumentieren und bei der Stadt einzufordern. Drücke den Button, wenn es gerade laut ist.</p>
         </div>
         
-        <div class="button-section">
-            <div class="button-question">Ist es gerade laut?</div>
-            <button class="main-button" id="mainBtn">🔊 JA – JETZT DRÜCKEN</button>
-            
-            <div class="reason-select" id="reasonSelect">
-                <p>Was ist der Grund?</p>
-                <div class="reason-buttons">
-                    <button class="reason-btn" data-reason="general">📢 Lärmbelästigung allgemein</button>
-                    <button class="reason-btn" data-reason="cars">🚗 Laute Autos / Auspuff</button>
-                    <button class="reason-btn" data-reason="motorcycles">🏍️ Motorräder</button>
+        <div class="main-content">
+            <!-- LEFT COLUMN -->
+            <div class="left-column">
+                <div class="button-section">
+                    <div class="button-question">Ist es gerade laut?</div>
+                    <button class="main-button" id="mainBtn">🔊 JA – JETZT DRÜCKEN</button>
+                    
+                    <div class="progress-container" id="progressContainer">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="progress-text" id="progressText">⏱️ Warten Sie 60s</div>
+                    </div>
                 </div>
+                
+                <div class="reason-select" id="reasonSelect">
+                    <p>Was ist der Grund?</p>
+                    <div class="reason-buttons">
+                        <button class="reason-btn" data-reason="general">📢 Lärmbelästigung allgemein</button>
+                        <button class="reason-btn" data-reason="cars">🚗 Laute Autos / Auspuff</button>
+                        <button class="reason-btn" data-reason="motorcycles">🏍️ Motorräder</button>
+                    </div>
+                </div>
+                
+                <div class="confirmation" id="confirmation"></div>
             </div>
             
-            <div class="confirmation" id="confirmation"></div>
+            <!-- RIGHT COLUMN -->
+            <div class="right-column" id="statsContainer">
+                <div class="loading">Laden...</div>
+            </div>
         </div>
         
-        <div id="statsContainer" class="loading">Laden...</div>
-        
         <div class="footer">
-            <p>Datenschutz: Deine Meldung wird anonym gespeichert. Keine IP-Adressen, keine persönlichen Daten.</p>
-            <p style="margin-top: 15px;">
+            <p><strong>Datenschutz:</strong> Deine Meldung wird anonym gespeichert. Keine IP-Adressen, keine persönlichen Daten.</p>
+            <p>
                 <a href="https://www.spd-ehrenfeld.de">Kontakt &amp; mehr Infos zur SPD Ehrenfeld</a>
             </p>
         </div>
@@ -90,6 +166,9 @@
         const reasonSelect = document.getElementById('reasonSelect');
         const confirmation = document.getElementById('confirmation');
         const statsContainer = document.getElementById('statsContainer');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
         
         mainBtn.addEventListener('click', () => {
             reasonSelect.classList.add('show');
@@ -136,30 +215,30 @@
         
         function startCountdown() {
             const lastVote = localStorage.getItem('lastVoteTime');
-            const remaining = Math.ceil((60000 - (Date.now() - lastVote)) / 1000);
-            
+            progressContainer.classList.add('show');
             mainBtn.disabled = true;
-            mainBtn.style.background = 'linear-gradient(180deg, #999 0%, #888 50%, #777 100%)';
-            mainBtn.style.opacity = '0.6';
-            mainBtn.style.cursor = 'not-allowed';
-            mainBtn.style.pointerEvents = 'none';
-            mainBtn.textContent = `⏱️ Warten Sie ${remaining}s`;
             
-            const interval = setInterval(() => {
+            const updateProgress = () => {
                 const newNow = Date.now();
-                const newRemaining = Math.ceil((60000 - (newNow - lastVote)) / 1000);
-                if (newRemaining > 0) {
-                    mainBtn.textContent = `⏱️ Warten Sie ${newRemaining}s`;
-                } else {
+                const elapsed = newNow - lastVote;
+                const remaining = Math.max(0, 60000 - elapsed);
+                const remainingSeconds = Math.ceil(remaining / 1000);
+                const percentage = (remaining / 60000) * 100;
+                
+                progressFill.style.width = percentage + '%';
+                progressText.textContent = `⏱️ Warten Sie ${remainingSeconds}s`;
+                
+                if (remaining <= 0) {
                     mainBtn.disabled = false;
                     mainBtn.style.background = 'linear-gradient(180deg, #f31423 0%, #e30613 50%, #c00511 100%)';
-                    mainBtn.style.opacity = '1';
-                    mainBtn.style.cursor = 'pointer';
-                    mainBtn.style.pointerEvents = 'auto';
+                    progressContainer.classList.remove('show');
                     mainBtn.textContent = '🔊 JA – JETZT DRÜCKEN';
-                    clearInterval(interval);
+                } else {
+                    setTimeout(updateProgress, 100);
                 }
-            }, 1000);
+            };
+            
+            updateProgress();
         }
         
         function updateStats() {
@@ -167,7 +246,7 @@
                 .then(res => res.json())
                 .then(data => {
                     if (!data) {
-                        statsContainer.innerHTML = '<div class="stats-section"><div class="empty-state">Noch keine Meldungen. Drücke den Button oben!</div></div>';
+                        statsContainer.innerHTML = '<div class="stats-card"><div class="empty-state">Noch keine Meldungen. Drücke den Button links!</div></div>';
                         return;
                     }
                     
@@ -180,7 +259,7 @@
                     };
                     
                     const latestReports = [...reports].reverse().slice(0, 5);
-                    let latestHtml = '<ol style="margin: 0; padding-left: 20px;">';
+                    let latestHtml = '<ol>';
                     latestReports.forEach(report => {
                         const date = new Date(report.timestamp);
                         const dayNum = String(date.getDate()).padStart(2, '0');
@@ -193,11 +272,47 @@
                             'cars': '🚗 Laute Autos',
                             'motorcycles': '🏍️ Motorräder'
                         };
-                        latestHtml += `<li style="margin-bottom: 8px; padding: 8px; background: #f5f5f5; border-radius: 5px; font-size: 13px;"><strong>${dayNum}.${month}.${year} ${hours}:${minutes} Uhr</strong><br><span style="color: #666;">${reasonLabel[report.reason]}</span></li>`;
+                        latestHtml += `<li><span class="timestamp">${dayNum}.${month}.${year} ${hours}:${minutes} Uhr</span><span class="reason">${reasonLabel[report.reason]}</span></li>`;
                     });
                     latestHtml += '</ol>';
                     
-                    let html = `<div class="stats-section"><h3>Gesamte Meldungen</h3><div class="total-count"><p>${reports.length}</p></div></div><div class="stats-section"><h3>Gründe</h3><div class="reason-stats"><div class="reason-stat"><p class="stat-general">${reasonStats.general}</p><p>Allgemein</p></div><div class="reason-stat"><p class="stat-cars">${reasonStats.cars}</p><p>Autos</p></div><div class="reason-stat"><p class="stat-motorcycles">${reasonStats.motorcycles}</p><p>Motorräder</p></div></div></div><div class="stats-section"><h3>Meldungen pro Stunde (24h)</h3><div class="chart-container"><canvas id="hourlyChart"></canvas></div></div><div class="stats-section"><h3>Letzte Meldungen</h3>${latestHtml}</div>`;
+                    let html = `
+                        <div class="stats-card">
+                            <h3>Gesamte Meldungen</h3>
+                            <div class="total-count">
+                                <p>${reports.length}</p>
+                                <span>Meldungen insgesamt</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stats-card">
+                            <h3>Verteilung nach Grund</h3>
+                            <div class="reason-stats">
+                                <div class="reason-stat-card general">
+                                    <div class="value">${reasonStats.general}</div>
+                                    <div class="label">Allgemein</div>
+                                </div>
+                                <div class="reason-stat-card cars">
+                                    <div class="value">${reasonStats.cars}</div>
+                                    <div class="label">Autos</div>
+                                </div>
+                                <div class="reason-stat-card motorcycles">
+                                    <div class="value">${reasonStats.motorcycles}</div>
+                                    <div class="label">Motorräder</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stats-card">
+                            <h3>Meldungen pro Stunde (24h)</h3>
+                            <div class="chart-container"><canvas id="hourlyChart"></canvas></div>
+                        </div>
+                        
+                        <div class="stats-card latest-reports">
+                            <h3>Letzte Meldungen</h3>
+                            ${latestHtml}
+                        </div>
+                    `;
                     
                     statsContainer.innerHTML = html;
                     
@@ -210,7 +325,7 @@
                     const dataPoints = Array.from({length: 24}, (_, i) => hourlyStats[i]);
                     const maxValue = Math.max(...dataPoints, 1);
                     const colors = dataPoints.map(value => {
-                        if (value === 0) return 'rgba(200, 200, 200, 0.3)';
+                        if (value === 0) return 'rgba(200, 200, 200, 0.2)';
                         const opacity = value / maxValue;
                         return `rgba(227, 6, 19, ${0.3 + (opacity * 0.7)})`;
                     });
@@ -219,7 +334,7 @@
                     new Chart(ctx, {
                         type: 'bar',
                         data: { labels: labels, datasets: [{ label: 'Meldungen', data: dataPoints, backgroundColor: colors, borderRadius: 4, borderWidth: 0 }] },
-                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } }, x: { ticks: { maxRotation: 45, minRotation: 0 } } } }
+                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } }, x: { ticks: { maxRotation: 45, minRotation: 0, font: { size: 12 } } } } }
                     });
                 })
                 .catch(err => console.error(err));
