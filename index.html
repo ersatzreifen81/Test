@@ -56,6 +56,8 @@
         .confirmation.show { display: block; }
         .confirmation.error { background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); color: #721c24; border-left-color: #dc3545; }
         /* COMMENT FORM */
+        .comment-invite { display: none; background: white; padding: 16px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); font-size: 14px; color: #555; text-align: center; line-height: 1.6; }
+        .comment-invite.show { display: block; }
         .comment-form { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 2px solid transparent; transition: all 0.4s; }
         .comment-form.highlight { border-color: #28a745; box-shadow: 0 4px 25px rgba(40, 167, 69, 0.45); }
         .comment-form > p { margin-bottom: 15px; font-weight: 700; color: #333; font-size: 16px; }
@@ -154,6 +156,7 @@
                     </div>
                 </div>
                 <div class="confirmation" id="confirmation" aria-live="polite"></div>
+                <div class="comment-invite" id="commentInvite">💬 Magst du noch einen kurzen Kommentar dalassen? <button class="intro-toggle" id="commentInviteBtn">Hier klicken</button> oder scrolle nach unten.</div>
             </div>
             <!-- RIGHT COLUMN -->
             <div class="right-column">
@@ -237,6 +240,13 @@
             mainBtn.style.display = 'none';
         });
 
+        document.getElementById('commentInviteBtn').addEventListener('click', () => {
+            document.getElementById('commentInvite').classList.remove('show');
+            commentForm.classList.add('highlight');
+            commentForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => commentForm.classList.remove('highlight'), 6000);
+        });
+
         document.getElementById('cancelBtn').addEventListener('click', () => {
             reasonSelect.classList.remove('show');
             mainBtn.style.display = 'flex';
@@ -262,19 +272,17 @@
                     reasonSelect.classList.remove('show');
                     confirmation.classList.remove('error');
                     confirmation.classList.add('show');
-                    confirmation.textContent = `✓ Danke! Grund: ${reasonLabel[reason]}`;
+                    confirmation.textContent = `✓ Danke für deine Stimme! Grund: ${reasonLabel[reason]}`;
                     localStorage.setItem('lastVoteTime', Date.now());
                     mainBtn.style.display = 'flex';
                     startCountdown();
                     updateStats();
-                    // Kommentar-Box hervorheben
-                    document.getElementById('commentHeading').firstChild.textContent = '💬 Magst du noch einen kurzen Kommentar dalassen? ';
-                    commentForm.classList.add('highlight');
-                    commentForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                    setTimeout(() => commentForm.classList.remove('highlight'), 6000);
+                    // Einladung zum Kommentieren einblenden
+                    document.getElementById('commentInvite').classList.add('show');
+                    setTimeout(() => document.getElementById('commentInvite').classList.remove('show'), 20000);
                     setTimeout(() => {
                         confirmation.classList.remove('show');
-                    }, 2000);
+                    }, 4000);
                 }).catch(err => {
                     console.error(err);
                     reasonSelect.classList.remove('show');
