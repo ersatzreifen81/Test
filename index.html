@@ -147,7 +147,8 @@
                     <div class="char-counter" id="charCounter">0/160</div>
                     <div class="comment-error" id="commentError"></div>
                     <div class="comment-actions">
-                        <button class="comment-submit" id="commentSubmit">Kommentar absenden</button>
+                    <button class="comment-submit" id="commentSubmit">Kommentar absenden</button>
+                    <button class="comment-skip" id="commentCancel">✖ Abbrechen</button>
                     </div>
                 </div>
             </div>
@@ -280,6 +281,7 @@
             commentEmail.value = '';
             commentText.value = '';
             charCounter.textContent = '0/160';
+            document.getElementById('commentCancel').addEventListener('click', resetCommentForm);
         }
 
         document.getElementById('commentSubmit').addEventListener('click', () => {
