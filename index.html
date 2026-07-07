@@ -61,10 +61,12 @@
         .comment-error { color: #c00511; font-size: 13px; font-weight: 600; margin-bottom: 10px; display: none; }
         .comment-error.show { display: block; }
         .comment-actions { display: flex; gap: 10px; }
-        .comment-submit { flex: 1; padding: 14px; font-size: 15px; font-weight: 700; background: linear-gradient(180deg, #f31423 0%, #e30613 50%, #c00511 100%); color: white; border: none; border-radius: 10px; cursor: pointer; }
-        .comment-submit:hover { background: linear-gradient(180deg, #f82a35 0%, #f31423 50%, #d00512 100%); }
-        .comment-skip { padding: 14px 18px; font-size: 14px; font-weight: 600; border: 2px solid #ddd; border-radius: 10px; cursor: pointer; background: #fafafa; color: #666; }
+        .comment-submit { flex: 1; padding: 14px; font-size: 15px; font-weight: 700; background: #d5d5d5; color: #888; border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .comment-submit.ready { background: linear-gradient(180deg, #34c759 0%, #28a745 50%, #1e7e34 100%); color: white; }
+        .comment-submit.ready:hover { background: linear-gradient(180deg, #40d465 0%, #2fb551 50%, #248c3b 100%); }
+        .comment-skip { padding: 14px 18px; font-size: 14px; font-weight: 600; border: 2px solid #ddd; border-radius: 10px; cursor: pointer; background: #fafafa; color: #666; transition: all 0.3s; }
         .comment-skip:hover { background: #f0f0f0; }
+        .comment-skip.active { border-color: #e30613; color: #c00511; background: #fff5f5; font-weight: 700; }
         /* RIGHT COLUMN */
         .right-column { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
         .stats-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
@@ -272,6 +274,18 @@
         commentText.addEventListener('input', () => {
             charCounter.textContent = commentText.value.length + '/160';
         });
+        // Buttons je nach Eingabezustand einfärben
+        function updateCommentButtons() {
+            const name = commentName.value.trim();
+            const email = commentEmail.value.trim();
+            const text = commentText.value.trim();
+            const anyInput = name.length > 0 || email.length > 0 || text.length > 0;
+            const emailOk = !email || (email.length <= 30 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+            const ready = name.length >= 1 && name.length <= 25 && text.length >= 1 && text.length <= 160 && emailOk;
+            document.getElementById('commentSubmit').classList.toggle('ready', ready);
+            document.getElementById('commentCancel').classList.toggle('active', anyInput);
+        }
+        [commentName, commentEmail, commentText].forEach(el => el.addEventListener('input', updateCommentButtons));
 
         function showCommentError(msg) {
             commentError.textContent = msg;
@@ -285,6 +299,7 @@
             commentEmail.value = '';
             commentText.value = '';
             charCounter.textContent = '0/160';
+            updateCommentButtons();
         }
         document.getElementById('commentCancel').addEventListener('click', resetCommentForm);
         document.getElementById('commentSubmit').addEventListener('click', () => {
