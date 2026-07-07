@@ -281,9 +281,8 @@
             commentEmail.value = '';
             commentText.value = '';
             charCounter.textContent = '0/160';
-            document.getElementById('commentCancel').addEventListener('click', resetCommentForm);
         }
-
+        document.getElementById('commentCancel').addEventListener('click', resetCommentForm);
         document.getElementById('commentSubmit').addEventListener('click', () => {
             const name = commentName.value.trim();
             const email = commentEmail.value.trim();
