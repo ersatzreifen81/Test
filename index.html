@@ -22,7 +22,7 @@
         .header .tagline { color: #333; font-size: 16px; font-weight: 700; margin-bottom: 12px; }
         .header .intro { background: white; max-width: 560px; margin: 0 auto; padding: 14px 18px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); text-align: left; }
         .header .intro p { margin: 0; color: #555; font-size: 15px; line-height: 1.6; }
-        .header .intro p.collapsed { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+        .header .intro p.collapsed span { display: none; }
         .intro-toggle { background: none; border: none; color: #e30613; font-weight: 700; font-size: 14px; cursor: pointer; padding: 6px 0 0; }
         .main-content { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
         /* LEFT COLUMN */
@@ -126,7 +126,7 @@
             <h1><span class="a57-sign"><span class="a57-num">A 57</span><span class="a57-word">LÄRMMELDER</span></span></h1>
             <p class="tagline">Gemeinsam gegen den Autobahnlärm in Neuehrenfeld</p>
             <div class="intro">
-                <p class="collapsed" id="introText">Die A57 verursacht in Neuehrenfeld erheblichen Lärm. Besonders belastend sind getunte Fahrzeuge: Autos mit manipulierten Auspuffanlagen sowie stark beschleunigende Motorräder. Deine Meldung hilft uns zu dokumentieren, wann und warum es laut ist. Einfach den Button drücken, wenn es gerade mal wieder richtig schlimm ist.</p>
+                <p class="collapsed" id="introText">Die A57 verursacht in Neuehrenfeld erheblichen Lärm.<span> Besonders belastend sind getunte Fahrzeuge: Autos mit manipulierten Auspuffanlagen sowie stark beschleunigende Motorräder. Deine Meldung hilft uns zu dokumentieren, wann und warum es laut ist. Einfach den Button drücken, wenn es gerade mal wieder richtig schlimm ist.</span></p>
                 <button class="intro-toggle" id="introToggle">weiterlesen</button>
             </div>
         </div>
