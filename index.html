@@ -310,9 +310,9 @@
                         const hours = String(date.getHours()).padStart(2, '0');
                         const minutes = String(date.getMinutes()).padStart(2, '0');
                         const reasonLabel = {
-                            'general': '📢 Lärmbelästigung allgemein',
-                            'cars': '🚗 Laute Autos',
-                            'motorcycles': '🏍️ Motorräder'
+                            'general': '📢 Allgemeiner Verkehrslärm',
+                            'cars': '🚗 Getuntes Auto',
+                            'motorcycles': '🏍️ Motorrad'
                         };
                         latestHtml += `<li><span class="timestamp">${dayNum}.${month}.${year} ${hours}:${minutes} Uhr</span><span class="reason">${reasonLabel[report.reason] || ''}</span></li>`;
                     });
@@ -332,15 +332,15 @@
                             <div class="reason-stats">
                                 <div class="reason-stat-card general">
                                     <div class="value">${reasonStats.general}</div>
-                                    <div class="label">Allgemein</div>
+                                    <div class="label">Allgemeiner Verkehrslärm</div>
                                 </div>
                                 <div class="reason-stat-card cars">
                                     <div class="value">${reasonStats.cars}</div>
-                                    <div class="label">Autos</div>
+                                    <div class="label">Getuntes Auto</div>
                                 </div>
                                 <div class="reason-stat-card motorcycles">
                                     <div class="value">${reasonStats.motorcycles}</div>
-                                    <div class="label">Motorräder</div>
+                                    <div class="label">Motorrad</div>
                                 </div>
                             </div>
                         </div>
