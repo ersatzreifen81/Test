@@ -178,18 +178,16 @@
         document.querySelectorAll('.reason-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const reason = e.currentTarget.dataset.reason;
-                const now = new Date();
-                
+                                
                 const reasonLabel = {
                     'general': 'Lärmbelästigung allgemein',
                     'cars': 'Laute Autos',
                     'motorcycles': 'Motorräder'
                 };
-                
-                const data = {
-                    reason: reason,
-                    timestamp: now.toISOString(),
-                    hour: now.getHours()
+               const data = {
+            reason: reason,
+            timestamp: { ".sv": "timestamp" }
+                };
                 };
                 
                 fetch(DB_URL + '.json', {
