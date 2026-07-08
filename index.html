@@ -15,7 +15,10 @@
         .header { text-align: center; margin-bottom: 30px; }
         .logo-section { margin-bottom: 20px; }
         .header h1 { margin: 0 0 10px; }
-        .footer-logo { height: 64px; width: auto; margin-bottom: 5px; }
+        .footer-top { display: flex; align-items: center; gap: 25px; text-align: left; }
+        .footer-logo { height: 90px; width: auto; display: block; flex-shrink: 0; }
+        .footer-links { flex: 1; min-width: 0; }
+        .footer-contact { text-align: center; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px; }
         .a57-sign { display: inline-block; background: #004f9f; color: #fff; border: 3px solid #fff; outline: 2px solid #004f9f; border-radius: 12px; padding: 12px 36px; text-align: center; }
         .a57-sign .a57-num { display: block; font-size: 46px; font-weight: 900; line-height: 1.1; }
         .a57-sign .a57-word { display: block; font-size: 19px; font-weight: 700; letter-spacing: 2.5px; }
@@ -177,19 +180,21 @@
             </div>
         </div>
         <div class="footer">
-            <a href="https://www.spd-ehrenfeld.de" target="_blank">
-                <img src="logo.png" alt="SPD Köln Ehrenfeld" class="footer-logo">
-            </a>
-            <details style="margin: 15px 0; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto;">
-                <summary style="cursor: pointer; font-weight: 600; text-align: center;">Datenschutz</summary>
+            <div class="footer-top">
+                <a href="https://www.spd-ehrenfeld.de" target="_blank">
+                    <img src="logo.png" alt="SPD Köln Ehrenfeld" class="footer-logo">
+                </a>
+                <div class="footer-links">
+            <details style="text-align: left;">
+                <summary style="cursor: pointer; font-weight: 600;">Datenschutz</summary>
                 <div style="margin-top: 12px; line-height: 1.7;">
                     <p>Deine Lärm-Meldung wird anonym gespeichert – nur Zeitpunkt und Grund, keine persönlichen Daten, keine Cookies, kein Tracking. Die Daten liegen in einer Google-Firebase-Datenbank (Serverstandort EU). Beim Aufruf der Seite verarbeiten Google Firebase technisch bedingt deine IP-Adresse; diese wird von uns weder gespeichert noch ausgewertet. Auf deinem Gerät wird lediglich der Zeitpunkt deiner letzten Meldung abgelegt (für die 60-Sekunden-Sperre).</p>
                     <p>Wenn du freiwillig einen Kommentar hinterlässt, speichern wir den angegebenen Namen, den Kommentartext und – falls angegeben – deine E-Mail-Adresse. Name und Kommentar werden auf dieser Seite veröffentlicht; die E-Mail-Adresse wird nicht veröffentlicht und nur für eventuelle Rückfragen genutzt. Du kannst die Löschung deines Kommentars jederzeit per E-Mail an info@spd-ehrenfeld.de verlangen.</p>
                     <p>Ausführliche Datenschutzhinweise: <a href="https://www.spd-ehrenfeld.de/datenschutz/">Datenschutzerklärung der SPD Ehrenfeld</a></p>
                 </div>
             </details>
-            <details style="margin: 15px 0; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto;">
-                <summary style="cursor: pointer; font-weight: 600; text-align: center;">Impressum</summary>
+            <details style="text-align: left; margin-top: 10px;">
+                <summary style="cursor: pointer; font-weight: 600;">Impressum</summary>
                 <div style="margin-top: 12px; line-height: 1.7;">
                     <p><strong>Angaben gemäß § 5 DDG:</strong><br>
                     Sozialdemokratische Partei Deutschlands (SPD)<br>
@@ -204,7 +209,9 @@
                     Magnusstraße 18 b, 50672 Köln</p>
                 </div>
             </details>
-            <p><a href="https://www.spd-ehrenfeld.de">Kontakt &amp; mehr Infos zur SPD Ehrenfeld</a></p>
+                </div>
+            </div>
+            <p class="footer-contact"><a href="https://www.spd-ehrenfeld.de">Kontakt &amp; mehr Infos zur SPD Ehrenfeld</a></p>
         </div>
     </div>
     <script>
